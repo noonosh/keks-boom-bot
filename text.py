@@ -1,5 +1,5 @@
 texts = {
-    'choose_language': "🇺🇿 Tilni tanlang\n🇷🇺 Выберите язык\n🇬🇧 Choose a language",
+    'choose_language': "Tilni tanlang\nВыберите язык\nChoose a language",
     'greeting': {
         'uz': 'Assalomu alaykum. Xush kelibsiz!',
         'ru': 'Здравствуйте. Добро пожаловать!',

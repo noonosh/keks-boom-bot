@@ -11,3 +11,4 @@
 
 NewUser = 'NewUser'
 ActiveUser = 'ActiveUser'
+LanguageGot = 'LanguageGot'
