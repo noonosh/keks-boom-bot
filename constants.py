@@ -3,8 +3,10 @@
 (
     LANGUAGE,
     NAME,
-    MAIN_PAGE
-) = range(3)
+    MAIN_PAGE,
+    CHANGING_LANG,
+    SELECTING_QUANTITY
+) = range(5)
 
 
 # User statuses

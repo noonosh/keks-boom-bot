@@ -1,8 +1,9 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import CallbackContext
 from database_manager import get_chat, cursor, connect
-from constants import NewUser, LANGUAGE, ActiveUser
-from callbacks.language import choose_language
+from constants import NewUser, LANGUAGE, ActiveUser, MAIN_PAGE
+from callbacks.newbie import choose_language
+from callbacks.mainpage import main_menu
 
 
 def start(update, context: CallbackContext):
@@ -33,6 +34,11 @@ def start(update, context: CallbackContext):
                 start(update, context)
                 return LANGUAGE
             else:
-                pass
+                main_menu(update, context)
+                return MAIN_PAGE
 
+
+def reset(update, context):
+    main_menu(update, context)
+    return MAIN_PAGE
 
