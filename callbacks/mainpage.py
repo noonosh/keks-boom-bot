@@ -2,6 +2,7 @@ from telegram.ext import CallbackContext
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from text import texts, buttons
 from database_manager import language, get_chat
+from constants import MAIN_PAGE
 
 
 def main_menu(update, context: CallbackContext):
@@ -15,5 +16,10 @@ def main_menu(update, context: CallbackContext):
     context.bot.send_message(chat_id=get_chat(update),
                              text=texts['main_menu'][language(update)],
                              reply_markup=ReplyKeyboardMarkup(markup, resize_keyboard=True))
+
+
+def back_to_main(update, context):
+    main_menu(update, context)
+    return MAIN_PAGE
 
 

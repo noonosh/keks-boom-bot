@@ -29,6 +29,14 @@ def ignore(update, context):
     return
 
 
+def join_regex(param: str):
+    return '^' + '|'.join(stringify(param)) + '$'
+
+
+def back_button():
+    return join_regex('back')
+
+
 def main():
     updater = Updater(token=API_TOKEN)
     dispatcher = updater.dispatcher
@@ -43,13 +51,35 @@ def main():
                 MessageHandler(Filters.text, name_accept)
             ],
             MAIN_PAGE: [
-                MessageHandler(Filters.regex('^' + '|'.join(stringify('order')) + '$'), preview),
-                MessageHandler(Filters.regex('^' + '|'.join(stringify('watch_tutorial')) + '$'), ignore),
-                MessageHandler(Filters.regex('^' + '|'.join(stringify('ask_question')) + '$'), ignore),
-                MessageHandler(Filters.regex('^' + '|'.join(stringify('change_language')) + '$'), settings_markup)
+                MessageHandler(Filters.regex(join_regex('order')), preview),
+                MessageHandler(Filters.regex(join_regex('watch_tutorial')), ignore),
+                MessageHandler(Filters.regex(join_regex('ask_question')), ignore),
+                MessageHandler(Filters.regex(join_regex('change_language')), settings_markup)
             ],
             CHANGING_LANG: [
-                MessageHandler(Filters.regex('^' + '|'.join(stringify('language')) + '$'), change_language)
+                MessageHandler(Filters.regex(join_regex('language')), change_language)
+            ],
+            SELECTING_QUANTITY: [
+                MessageHandler(Filters.regex(back_button()), back_to_main),
+                MessageHandler(Filters.text, get_quantity)
+            ],
+            REQUESTING_PHONE: [
+                MessageHandler(Filters.regex(back_button()), preview),
+                MessageHandler(Filters.contact | Filters.text, check_phone)
+            ],
+            REQUESTING_ADDRESS: [
+                MessageHandler(Filters.regex(back_button()), request_phone),
+                MessageHandler(Filters.location, address)
+            ],
+            REQUESTING_COMMENTS: [
+                MessageHandler(Filters.regex(back_button()), request_address),
+                MessageHandler(Filters.regex(join_regex('skip')), checkout),
+                MessageHandler(Filters.text, get_comments)
+            ],
+            CONFIRMING_ORDER: [
+                MessageHandler(Filters.regex(join_regex('confirm')), ignore),
+                MessageHandler(Filters.regex(join_regex('cancel')), ignore)
+
             ]
         },
         fallbacks=[
