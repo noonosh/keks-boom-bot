@@ -41,6 +41,11 @@ Let's get closer.\n<b>What is your name?</b>"""
         'uz': "Tayyor! ✅",
         'ru': "Готово! ✅",
         'en': 'Done! ✅'
+    },
+    'checkout': {
+        'uz': "Sizning buyurmangiz:\n\n",
+        'ru': "vash zakaz:\n\n",
+        'en': "your order\n\n"
     }
 }
 
@@ -74,5 +79,20 @@ buttons = {
         'uz': "🔙 Orqaga",
         'ru': "🔙 Назад",
         'en': "🔙 Back"
+    },
+    'skip': {
+        'uz': "Otqazib yubor",
+        'ru': "Пропустить",
+        'en': "Skip it"
+    },
+    'confirm': {
+        'uz': "tasdiqlash",
+        'ru': "podtverdit",
+        'en': "confirm it"
+    },
+    'cancel': {
+        'uz': 'otmenit',
+        'ru': 'otmena',
+        'en': 'cancel'
     }
 }

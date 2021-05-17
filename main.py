@@ -9,10 +9,11 @@ from callbacks.starter import start, reset
 from constants import *
 from error_send import error_handler
 from callbacks.newbie import greet_user, name_accept
-from callbacks.settings import change_language
-from callbacks.orders import preview
+from callbacks.orders import (preview, get_quantity, check_phone, address, request_phone, request_address,
+                              get_comments, checkout)
 from text import buttons
 from callbacks.settings import settings_markup, change_language
+from callbacks.mainpage import back_to_main
 
 
 def stringify(button_texts: str):
