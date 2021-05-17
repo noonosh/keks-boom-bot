@@ -43,7 +43,7 @@ Let's get closer.\n<b>What is your name?</b>"""
         'en': '🏠 Home page:'
     },
     'description': {
-        'uz': "💴 10,000 so'm",
+        'uz': "iltimos kimdur shuni perevod qibersin. rus tilidigisi bor",
         'ru': """🔥 Экологические BOOM! — Кекс-Огни
 
 ⏰ 10-15 минут горения для разжигания барбекю, костра и различного угля. 
@@ -54,7 +54,7 @@ Let's get closer.\n<b>What is your name?</b>"""
 <b>Цена:</b> 10.000 сум (1 пачка)
 
 <i>🚛 При заказе от 5 пачек доставка - БЕСПЛАТНО</i>""",
-        'en': '💴 10.000 som'
+        'en': 'please someone translate into english from russian. Thank you)'
     },
     'change_language': {
         'uz': "🇺🇿 Tilni tanlang",
