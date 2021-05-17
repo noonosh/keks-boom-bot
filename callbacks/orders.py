@@ -1,5 +1,7 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import CallbackContext
+
+import text
 from database_manager import get_chat, language, cursor, connect
 from constants import SELECTING_QUANTITY, REQUESTING_PHONE, REQUESTING_ADDRESS, REQUESTING_COMMENTS, \
     CONFIRMING_ORDER
@@ -27,9 +29,10 @@ def build_menu(
 
 def preview(update, context: CallbackContext):
     context.bot.send_photo(chat_id=get_chat(update),
-                           photo='AgACAgIAAxkDAAICFmCekm_McgqyQMml0AX138R3P3EyAALjs'
-                                 'zEbRzHoSEYRsIYhjz2v9rGEoi4AAwEAAwIAA3gAAx8yAgABHwQ',
-                           caption='10.000 soums')
+                           photo='AgACAgIAAxkBAAMKYKIdCbYXhUlpdlHadmv2BplSoUkAAtayMRuvn'
+                                 'BhJg-Szr5vYGO091o2iLgADAQADAgADbQADiGoCAAEfBA'
+                           ,
+                           caption=text.captions['money'][language(update)])
     quantity(update, context)
     return SELECTING_QUANTITY
 
@@ -38,14 +41,15 @@ def quantity(update, context: CallbackContext):
     button_list = [KeyboardButton(str(s)) for s in range(1, 10)]
 
     context.bot.send_message(chat_id=get_chat(update),
-                             text='choose quantity',
+                             text=texts['choose_quantity'][language(update)],
                              reply_markup=ReplyKeyboardMarkup(
                                  build_menu(button_list,
                                             n_cols=3,
                                             footer_buttons=KeyboardButton(
                                                 buttons['back'][language(update)])
                                             )
-                                 , resize_keyboard=True))
+                                 , resize_keyboard=True),
+                             parse_mode='HTML')
 
 
 def get_quantity(update, context: CallbackContext):
@@ -67,21 +71,22 @@ def get_quantity(update, context: CallbackContext):
             return REQUESTING_PHONE
         else:
             context.bot.send_message(chat_id=get_chat(update),
-                                     text='too much choose again')
+                                     text=texts['too_much'][language(update)])
     except ValueError:
         context.bot.send_message(chat_id=get_chat(update),
-                                 text='this is not a quantity')
+                                 text=texts['not_quantity'][language(update)])
 
 
 def request_phone(update, context):
     button = [
-        [KeyboardButton('send my phone', request_contact=True)],
+        [KeyboardButton(buttons['send_phone_button'][language(update)], request_contact=True)],
         [KeyboardButton(buttons['back'][language(update)])]
     ]
 
     context.bot.send_message(chat_id=get_chat(update),
-                             text='good. now send me your phone number',
-                             reply_markup=ReplyKeyboardMarkup(button, resize_keyboard=True))
+                             text=texts['send_number'][language(update)],
+                             reply_markup=ReplyKeyboardMarkup(button, resize_keyboard=True),
+                             parse_mode='HTML')
     return REQUESTING_PHONE
 
 
@@ -89,7 +94,7 @@ def check_phone(update, context):
     message = update.effective_message
 
     if message.contact:
-        if message.contact.phone_number[:3] == '998':
+        if message.contact.phone_number[:3] == '998' or message.contact.phone_number[1:4] == '998':
             phone = message.contact.phone_number
 
             cursor.execute("UPDATE orders SET phone_number = '{}' WHERE order_id = '{}'"
@@ -98,23 +103,26 @@ def check_phone(update, context):
             request_address(update, context)
             return REQUESTING_ADDRESS
         else:
-            update.effective_message.reply_text('country error')
+            update.effective_message.reply_text(texts['country_error'][language(update)])
     else:
         phone = message.text[1:]
-        if phone[:3] == '998' and len(phone) == 12 and int(phone):
-            print('good number')
+        if phone[:3] == '998' and len(phone) == 12 and int(phone):  # chat not found
+            context.bot.send_message(chat_id=get_chat(update),
+                                     text=texts['good_number'][language(update)])
+            request_address(update, context)
+            return REQUESTING_ADDRESS
         else:
-            update.effective_message.reply_text('format error')
+            update.effective_message.reply_text(texts['format_error'][language(update)])  # language
 
 
 def request_address(update, context: CallbackContext):
     button = [
-        [KeyboardButton('send my location', request_location=True)],
+        [KeyboardButton(text=buttons['send_location'][language(update)], request_location=True)],
         [KeyboardButton(buttons['back'][language(update)])]
     ]
 
     context.bot.send_message(chat_id=get_chat(update),
-                             text='good. now send me your address',
+                             text=texts['send_address'][language(update)],
                              reply_markup=ReplyKeyboardMarkup(button, resize_keyboard=True))
     return REQUESTING_ADDRESS
 
@@ -157,7 +165,7 @@ def request_comments(update, context):
     ]
 
     context.bot.send_message(chat_id=get_chat(update),
-                             text='do u have any comments?',
+                             text=texts['any_comments?'][language(update)],
                              reply_markup=ReplyKeyboardMarkup(button, resize_keyboard=True))
 
 
@@ -190,7 +198,7 @@ def checkout(update, context):
 
     context.bot.send_message(chat_id=get_chat(update),
                              text=f'{txt}quantity-{q} price-{price} delivery-{DELIVERY_PRICE} total-{total}',
-                             reply_markup=ReplyKeyboardMarkup(markup))
+                             reply_markup=ReplyKeyboardMarkup(markup, resize_keyboard=True))
     return CONFIRMING_ORDER
 
 
@@ -199,4 +207,3 @@ def cancel_order(update, context):
     connect.commit()
 
     back_to_main(update, context)
-

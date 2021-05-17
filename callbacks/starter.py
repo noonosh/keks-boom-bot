@@ -1,4 +1,3 @@
-from telegram import KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import CallbackContext
 from database_manager import get_chat, cursor, connect
 from constants import NewUser, LANGUAGE, ActiveUser, MAIN_PAGE

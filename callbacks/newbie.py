@@ -12,9 +12,9 @@ def choose_language(update, context):
     message = update.message
     btn = buttons['language']
     markup = [
-        [InlineKeyboardButton(btn['uz'], callback_data='uz'),
-         InlineKeyboardButton(btn['ru'], callback_data='ru'),
-         InlineKeyboardButton(btn['en'], callback_data='en')]
+        [InlineKeyboardButton(btn['🇺🇿 uz'], callback_data='uz'),
+         InlineKeyboardButton(btn['🇷🇺 ru'], callback_data='ru'),
+         InlineKeyboardButton(btn['🇺🇸 en'], callback_data='en')]
     ]
     try:
         context.bot.delete_message(chat_id=get_chat(update),

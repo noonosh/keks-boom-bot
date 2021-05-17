@@ -18,14 +18,24 @@ Keling siz bilan yaqindan tanishamiz.\n<b>Ismingiz nima?</b>""",
 Let's get closer.\n<b>What is your name?</b>"""
     },
     'name_accepted': {
-        'uz': "Rahmat",
-        'ru': "Спасибо",
-        'en': "Thank you"
+        'uz': "🙏 Rahmat",
+        'ru': "🙏 Спасибо",
+        'en': "🙏 Thank you"
     },
     'name_error': {
-        'uz': "Ismingizni to'g'ri yozing\n\nMasalan: <i>Toshmat</i>",
-        'ru': "Пишите своё имя правильно\n\nНапример: <i>Тошмат</i>",
-        'en': "Enter your name properly\n\nFor example: <i>Michael</i>"
+        'uz': "⚠️ Ismingizni to'g'ri yozing\n\nMasalan: <i>Toshmat</i>",
+        'ru': "⚠️ Пишите своё имя правильно\n\nНапример: <i>Тошмат</i>",
+        'en': "⚠️ Enter your name properly\n\nFor example: <i>Michael</i>"
+    },
+    'country_error': {
+        'uz': "🌎 Mamlakat xatosi",
+        'ru': '🌎 Ошибка страны',
+        'en': '🌎 Country error'
+    },
+    'format_error': {
+        'uz': "🟡 Format xatosi",
+        'ru': '🟡 Ошибка формата',
+        'en': '🟡 Format error'
     },
     'main_menu': {
         'uz': '🏠 Asosiy sahifa:',
@@ -33,9 +43,9 @@ Let's get closer.\n<b>What is your name?</b>"""
         'en': '🏠 Home page:'
     },
     'change_language': {
-        'uz': "Tilni tanlang",
-        'ru': "Выберите язык",
-        'en': "Choose a language"
+        'uz': "🇺🇿 Tilni tanlang",
+        'ru': "🇷🇺 Выберите язык",
+        'en': "🇬🇧 Choose a language"
     },
     'done': {
         'uz': "Tayyor! ✅",
@@ -43,9 +53,44 @@ Let's get closer.\n<b>What is your name?</b>"""
         'en': 'Done! ✅'
     },
     'checkout': {
-        'uz': "Sizning buyurmangiz:\n\n",
-        'ru': "vash zakaz:\n\n",
-        'en': "your order\n\n"
+        'uz': "📦 Sizning buyurtmangiz:\n\n",
+        'ru': "📦 Ваш заказ:\n\n",
+        'en': "📦 Your order\n\n"
+    },
+    'choose_quantity': {
+        'uz': "🖊 Miqdorni <b>tanlang</b> yoki <b>tering</b>",
+        'ru': "🖊 <b>Выберите</b> или <b>введите</b> количество",
+        'en': "🖊 <b>Choose</b> or <b>enter</b> quantity"
+    },
+    'too_much': {
+        'uz': "⚠️ Juda ko'p qayta tanlang",
+        'ru': "⚠️ Слишком много выберите снова",
+        'en': "⚠️ Too much choose again"
+    },
+    'not_quantity': {
+        'uz': "❗️ Bu miqdor emas",
+        'ru': "❗️ Это не количество",
+        'en': "❗️ This is not a quantity"
+    },
+    'send_number': {
+        'uz': "📱 Iltimos raqamingizni <b> +998 ** *** **** </b> deb <b>kiriting</b> yoki <b>yuboring</b>",
+        'ru': "📱 Какой у Вас номер? <b>Отправьте</b> или <b>введите</b> ваш номер телефона в виде:\n\n<b>+998 ** *** ****</b>",
+        'en': "📱 What is your number? <b>Send by button</b> or <b>enter</b> your phone number as:\n\n<b>+998 ** *** ****</b>?"
+    },
+    'good_number': {
+        'uz': "☎️ Qabul qilindi",
+        'ru': "☎️ Приняли",
+        'en': "☎️ Phone number accepted"
+    },
+    'send_address': {
+        'uz': "👍 Zo'r. Endi manzilizni yuboring",
+        'ru': '👍 Отлично. Теперь отправьте адресс',
+        'en': "👍 Excellent. It's time to share your address"
+    },
+    'any_comments?': {
+        'uz': "💬 Sharhlaringiz bormi?",
+        'ru': '💬 Можете оставить комментарий для вашего заказа: ',
+        'en': "💬 Do you have any comments?"
     }
 }
 
@@ -81,18 +126,38 @@ buttons = {
         'en': "🔙 Back"
     },
     'skip': {
-        'uz': "Otqazib yubor",
-        'ru': "Пропустить",
-        'en': "Skip it"
+        'uz': "⏩ O'tkazib yuborish",
+        'ru': "⏩ Пропустить",
+        'en': "⏩ Skip it"
     },
     'confirm': {
-        'uz': "tasdiqlash",
-        'ru': "podtverdit",
-        'en': "confirm it"
+        'uz': "✅ Tasdiqlash",
+        'ru': "✅ Подтвердить",
+        'en': "✅ Confirm"
     },
     'cancel': {
-        'uz': 'otmenit',
-        'ru': 'otmena',
-        'en': 'cancel'
+        'uz': '❌ Bekor qilish',
+        'ru': '❌ Отменить',
+        'en': '❌ Cancel'
+    },
+    'send_location': {
+        'uz': '📍 Mening joylashuvimni yuborish',
+        'ru': '📍 Отправить мое местоположение',
+        'en': '📍 Send my location'
+    },
+    'send_phone_button': {
+        'uz': '📱 Mening raqamim',
+        'ru': '📱 Мой номер',
+        'en': '📱 My phone number'
     }
 }
+
+captions = {
+    'money': {
+        'uz': "💴 10,000 so'm",
+        'ru': '💴 10,000 сум',
+        'en': '💴 10.000 som'
+    }
+}
+
+
