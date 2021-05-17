@@ -8,7 +8,7 @@ from callbacks.mainpage import main_menu
 def start(update, context: CallbackContext):
     chat = get_chat(update)
     row = cursor.execute("SELECT id FROM users WHERE telegram_id = '{}'".format(chat)).fetchall()
-    user = update.message.from_user
+    user = update.message
 
     if chat < 0:
         return  # In Group
@@ -18,7 +18,7 @@ def start(update, context: CallbackContext):
 
             cursor.execute("""INSERT INTO users(
             id, telegram_id, name, username, phone_number, language, status) VALUES (
-            NOT NULL, '{}', '{}', '{}', NULL, NULL, '{}')""".format(chat, user.full_name, user.username, NewUser))
+            NOT NULL, '{}', '{}', '{}', NULL, NULL, '{}')""".format(chat, user.from_user.full_name, user.from_user.username, NewUser))
             connect.commit()
 
             choose_language(update, context)

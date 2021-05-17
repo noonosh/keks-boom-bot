@@ -18,9 +18,9 @@ Keling siz bilan yaqindan tanishamiz.\n<b>Ismingiz nima?</b>""",
 Let's get closer.\n<b>What is your name?</b>"""
     },
     'name_accepted': {
-        'uz': "🙏 Rahmat",
-        'ru': "🙏 Спасибо",
-        'en': "🙏 Thank you"
+        'uz': "🙏 Rahmat, {}",
+        'ru': "🙏 Спасибо, {}",
+        'en': "🙏 Thank you, {}"
     },
     'name_error': {
         'uz': "⚠️ Ismingizni to'g'ri yozing\n\nMasalan: <i>Toshmat</i>",
@@ -42,6 +42,20 @@ Let's get closer.\n<b>What is your name?</b>"""
         'ru': '🏠 Главная страница:',
         'en': '🏠 Home page:'
     },
+    'description': {
+        'uz': "💴 10,000 so'm",
+        'ru': """🔥 Экологические BOOM! — Кекс-Огни
+
+⏰ 10-15 минут горения для разжигания барбекю, костра и различного угля. 
+
+⛈ Горит при любой погоде
+
+<b>В пачке:</b> 9 шт. кекс-огней
+<b>Цена:</b> 10.000 сум (1 пачка)
+
+<i>🚛 При заказе от 5 пачек доставка - БЕСПЛАТНО</i>""",
+        'en': '💴 10.000 som'
+    },
     'change_language': {
         'uz': "🇺🇿 Tilni tanlang",
         'ru': "🇷🇺 Выберите язык",
@@ -53,14 +67,65 @@ Let's get closer.\n<b>What is your name?</b>"""
         'en': 'Done! ✅'
     },
     'checkout': {
-        'uz': "📦 Sizning buyurtmangiz:\n\n",
-        'ru': "📦 Ваш заказ:\n\n",
-        'en': "📦 Your order\n\n"
+        'uz': """<b>📦 Sizning buyurtmangiz:</b>
+
+<b>Ism:</b> {}
+<b>Telefon raqam:</b> {}
+<b>Yetkazib berish manzili:</b> {}
+<b>Izoh</b>: {}
+
+1. <b>Keks boom</b>
+{} x {} = {}
+
+Yetkazib berish: {} {}
+
+<b>Jami:</b> {} {}""",
+        'ru': """<b>📦 Ваш заказ:</b>
+
+<b>Имя:</b> {}
+<b>Телефон:</b> {}
+<b>Адрес доставки:</b> {}
+<b>Комментарий:</b> {}
+
+1. <b>Кекс-огонь "BOOM"</b>
+{} x {} = {}
+
+Доставка: {} {}
+
+<b>Итого:</b> {} {}""",
+        'en': """📦 <b>Your order:</b>
+
+<b>Name:</b> {}
+<b>Phone:</b> {}
+<b>Delivery address:</b> {}
+<b>Comment:</b> {}
+
+1. <b>Fire-cake "BOOM"</b>
+{} x {} = {}
+
+Delivery: {} {}
+
+<b>Total:</b> {} {}"""
+    },
+    'currency': {
+        'uz': "so'm",
+        'ru': 'сум',
+        'en': 'som'
+    },
+    'no_comments': {
+        'uz': "Izohlar yo'q",
+        'ru': "Комментариев нет",
+        'en': "No comments"
+    },
+    'order_accepted': {
+        'uz': "Sizning buyurtmangiz qabul qilindi. Operator javobini kuting",
+        'ru': "Ваш заказ был принят. Ожидайте ответа оператора",
+        'en': "Your order has been accepter. Please wait for the salesman's response"
     },
     'choose_quantity': {
-        'uz': "🖊 Miqdorni <b>tanlang</b> yoki <b>tering</b>",
-        'ru': "🖊 <b>Выберите</b> или <b>введите</b> количество",
-        'en': "🖊 <b>Choose</b> or <b>enter</b> quantity"
+        'uz': "Miqdorni <b>tanlang</b> yoki <b>tering</b>:",
+        'ru': "<b>Выберите</b> или <b>введите</b> количество:",
+        'en': "<b>Choose</b> or <b>enter</b> quantity:"
     },
     'too_much': {
         'uz': "⚠️ Juda ko'p qayta tanlang",
@@ -88,10 +153,38 @@ Let's get closer.\n<b>What is your name?</b>"""
         'en': "👍 Excellent. It's time to share your address"
     },
     'any_comments?': {
-        'uz': "💬 Sharhlaringiz bormi?",
-        'ru': '💬 Можете оставить комментарий для вашего заказа: ',
-        'en': "💬 Do you have any comments?"
-    }
+        'uz': "💬 Istasangiz, izoh qoldirishingiz mumkin:",
+        'ru': '💬 Можете оставить комментарий для вашего заказа:',
+        'en': "💬 You can leave a comment for your order:"
+    },
+    'canceled': {
+        'uz': "Buyurtma bekor qilindi!",
+        'ru': "Заказ отменен!",
+        'en': "Order canceled!"
+    },
+    'new_order_for_admin': """Новый заказ!
+{}
+
+<b>Клиент:</b>
+Имя: {}
+Телефон: {}
+Юзернейм: {}
+Язык: {}
+
+<b>В заказе:</b>
+1. Кекс-огонь “BOOM”
+
+{} x {} = {}
+
+<b>Доставка:</b> {} сум
+
+<b>Детали доставки:</b>
+Адрес: <i>{}</i>
+
+Комментарии: {}
+
+
+<b>Итого:</b> {} сум"""
 }
 
 buttons = {
@@ -152,12 +245,5 @@ buttons = {
     }
 }
 
-captions = {
-    'money': {
-        'uz': "💴 10,000 so'm",
-        'ru': '💴 10,000 сум',
-        'en': '💴 10.000 som'
-    }
-}
 
 

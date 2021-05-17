@@ -10,7 +10,7 @@ from constants import *
 from error_send import error_handler
 from callbacks.newbie import greet_user, name_accept
 from callbacks.orders import (preview, get_quantity, check_phone, address, request_phone, request_address,
-                              get_comments, checkout)
+                              get_comments, checkout, cancel_order, confirm_order)
 from text import buttons
 from callbacks.settings import settings_markup, change_language
 from callbacks.mainpage import back_to_main
@@ -78,13 +78,13 @@ def main():
                 MessageHandler(Filters.text, get_comments)
             ],
             CONFIRMING_ORDER: [
-                MessageHandler(Filters.regex(join_regex('confirm')), ignore),
-                MessageHandler(Filters.regex(join_regex('cancel')), ignore)
+                MessageHandler(Filters.regex(join_regex('confirm')), confirm_order),
+                MessageHandler(Filters.regex(join_regex('cancel')), cancel_order)
 
             ]
         },
         fallbacks=[
-            MessageHandler(Filters.all, reset)
+            MessageHandler(Filters.all, start)
         ]
     )
 

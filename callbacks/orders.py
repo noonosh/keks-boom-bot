@@ -1,15 +1,13 @@
-from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import CallbackContext
-
-import text
 from database_manager import get_chat, language, cursor, connect
 from constants import SELECTING_QUANTITY, REQUESTING_PHONE, REQUESTING_ADDRESS, REQUESTING_COMMENTS, \
-    CONFIRMING_ORDER
+    CONFIRMING_ORDER, MAIN_PAGE
 from typing import Union, List
 from callbacks.mainpage import back_to_main
 from text import buttons, texts
 import datetime
-from configurations import DELIVERY_PRICE, UNIT_PRICE
+from configurations import DELIVERY_PRICE, UNIT_PRICE, ORDERS_CHANNEL_ID
 import requests
 
 
@@ -29,10 +27,10 @@ def build_menu(
 
 def preview(update, context: CallbackContext):
     context.bot.send_photo(chat_id=get_chat(update),
-                           photo='AgACAgIAAxkBAAMKYKIdCbYXhUlpdlHadmv2BplSoUkAAtayMRuvn'
-                                 'BhJg-Szr5vYGO091o2iLgADAQADAgADbQADiGoCAAEfBA'
-                           ,
-                           caption=text.captions['money'][language(update)])
+                           photo='AgACAgIAAxkBAAIFbmCic8tM8MbCq_Ih2efXS-'
+                                 'V1yIQ0AALcszEb5uIZSaPEts_gLT6VJqB_pS4AAwEAAwIAA20AAz75AAIfBA',
+                           caption=texts['description'][language(update)],
+                           parse_mode='HTML')
     quantity(update, context)
     return SELECTING_QUANTITY
 
@@ -59,13 +57,22 @@ def get_quantity(update, context: CallbackContext):
 
     try:
         if int(q) < 20:
-            cursor.execute("""INSERT INTO orders(timestamp, customer_id, quantity, 
-            unit_price, delivery_cost) VALUES ('{}', '{}', '{}', '{}', '{}')"""
-                           .format(time, get_chat(update), q, UNIT_PRICE, DELIVERY_PRICE))
-            context.chat_data.update({
-                'order_id': cursor.execute("SELECT last_insert_rowid() FROM orders").fetchone()[0]
-            })
-            connect.commit()
+            if int(q) >= 5:
+                cursor.execute("""INSERT INTO orders(timestamp, customer_id, quantity, 
+                unit_price, delivery_cost) VALUES ('{}', '{}', '{}', '{}', '{}')"""
+                               .format(time, get_chat(update), q, UNIT_PRICE, 0))
+                context.chat_data.update({
+                    'order_id': cursor.execute("SELECT last_insert_rowid() FROM orders").fetchone()[0]
+                })
+                connect.commit()
+            else:
+                cursor.execute("""INSERT INTO orders(timestamp, customer_id, quantity, 
+                unit_price, delivery_cost) VALUES ('{}', '{}', '{}', '{}', '{}')"""
+                               .format(time, get_chat(update), q, UNIT_PRICE, DELIVERY_PRICE))
+                context.chat_data.update({
+                    'order_id': cursor.execute("SELECT last_insert_rowid() FROM orders").fetchone()[0]
+                })
+                connect.commit()
 
             request_phone(update, context)
             return REQUESTING_PHONE
@@ -99,6 +106,9 @@ def check_phone(update, context):
 
             cursor.execute("UPDATE orders SET phone_number = '{}' WHERE order_id = '{}'"
                            .format(phone, context.chat_data['order_id']))
+            connect.commit()
+            cursor.execute("UPDATE users SET phone_number = '{}' WHERE telegram_id = '{}'"
+                           .format(phone, get_chat(update)))
             connect.commit()
             request_address(update, context)
             return REQUESTING_ADDRESS
@@ -180,14 +190,31 @@ def get_comments(update, context):
     return CONFIRMING_ORDER
 
 
+def format_price(number):
+    raw_list = list(str(number))
+    raw_list.insert(-3, ' ')
+    formatted = "".join(i for i in raw_list)
+    return formatted
+
+
 def checkout(update, context):
     order_id = context.chat_data['order_id']
     q = cursor.execute("SELECT quantity FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
-    price = cursor.execute("SELECT unit_price FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
-    total = q * UNIT_PRICE + DELIVERY_PRICE
-    cursor.execute("UPDATE orders SET total = '{}' WHERE order_id = '{}'"
-                   .format(total, order_id))
-    connect.commit()
+    comment = cursor.execute("SELECT comments FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    deliver_to = cursor.execute("SELECT location FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    user = cursor.execute("SELECT name, phone_number FROM users WHERE telegram_id = '{}'"
+                          .format(get_chat(update))).fetchmany()[0]
+
+    if q >= 5:
+        total = q * UNIT_PRICE
+        cursor.execute("UPDATE orders SET total = '{}' WHERE order_id = '{}'"
+                       .format(total, order_id))
+        connect.commit()
+    else:
+        total = q * UNIT_PRICE + DELIVERY_PRICE
+        cursor.execute("UPDATE orders SET total = '{}' WHERE order_id = '{}'"
+                       .format(total, order_id))
+        connect.commit()
 
     markup = [
         [KeyboardButton(buttons['confirm'][language(update)])],
@@ -197,13 +224,62 @@ def checkout(update, context):
     txt = texts['checkout'][language(update)]
 
     context.bot.send_message(chat_id=get_chat(update),
-                             text=f'{txt}quantity-{q} price-{price} delivery-{DELIVERY_PRICE} total-{total}',
-                             reply_markup=ReplyKeyboardMarkup(markup, resize_keyboard=True))
+                             text=txt.format(
+                                 user[0],
+                                 '+' + user[1],
+                                 deliver_to,
+                                 texts['no_comments'][language(update)] if comment is None else comment,
+                                 q,
+                                 format_price(UNIT_PRICE),
+                                 format_price(q * UNIT_PRICE),
+                                 format_price(total - q * UNIT_PRICE),
+                                 texts['currency'][language(update)],
+                                 format_price(total),
+                                 texts['currency'][language(update)]),
+                             reply_markup=ReplyKeyboardMarkup(markup, resize_keyboard=True),
+                             parse_mode='HTML')
     return CONFIRMING_ORDER
 
 
 def cancel_order(update, context):
-    cursor.execute("UPDATE orders SET comments ='CANCELED' WHERE last_insert_rowid()")
+    cursor.execute("UPDATE orders SET comments ='CANCELED' WHERE order_id = '{}'".format(context.chat_data['order_id']))
     connect.commit()
 
+    update.effective_message.reply_text(texts['canceled'][language(update)])
+
     back_to_main(update, context)
+    return MAIN_PAGE
+
+
+def confirm_order(update, context):
+    new_order = texts['new_order_for_admin']
+    order_id = context.chat_data['order_id']
+    timestamp = cursor.execute("SELECT timestamp FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    q = cursor.execute("SELECT quantity FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    comment = cursor.execute("SELECT comments FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    deliver_to = cursor.execute("SELECT location FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    user = cursor.execute("SELECT name, phone_number, username, language FROM users WHERE telegram_id = '{}'"
+                          .format(get_chat(update))).fetchmany()[0]
+    delivery_cost = cursor.execute("SELECT delivery_cost FROM orders WHERE order_id = '{}'"
+                                   .format(order_id)).fetchone()[0]
+
+    context.bot.send_message(chat_id=ORDERS_CHANNEL_ID,
+                             text=new_order
+                             .format(
+                                 timestamp,
+                                 user[0], user[1],
+                                 'тут пусто 🙃' if user[2] is None else user[2],
+                                 user[3],
+                                 q, format_price(UNIT_PRICE), format_price(q * UNIT_PRICE),
+                                 format_price(int(delivery_cost)),
+                                 deliver_to,
+                                 'без коммента' if comment is None else comment,
+                                 format_price(q * UNIT_PRICE + int(delivery_cost))
+                             ),
+                             parse_mode='HTML')
+
+    context.bot.send_message(chat_id=get_chat(update),
+                             text=texts['order_accepted'][language(update)])
+
+    back_to_main(update, context)
+    return MAIN_PAGE

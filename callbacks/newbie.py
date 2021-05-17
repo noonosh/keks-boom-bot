@@ -12,9 +12,9 @@ def choose_language(update, context):
     message = update.message
     btn = buttons['language']
     markup = [
-        [InlineKeyboardButton(btn['🇺🇿 uz'], callback_data='uz'),
-         InlineKeyboardButton(btn['🇷🇺 ru'], callback_data='ru'),
-         InlineKeyboardButton(btn['🇺🇸 en'], callback_data='en')]
+        [InlineKeyboardButton(btn['uz'], callback_data='uz'),
+         InlineKeyboardButton(btn['ru'], callback_data='ru'),
+         InlineKeyboardButton(btn['en'], callback_data='en')]
     ]
     try:
         context.bot.delete_message(chat_id=get_chat(update),
@@ -62,9 +62,10 @@ def name_accept(update, context: CallbackContext):
         connect.commit()
 
         context.bot.send_message(chat_id=get_chat(update),
-                                 text=texts['name_accepted'][language(update)])
+                                 text=texts['name_accepted'][language(update)].format(message.text))
 
         main_menu(update, context)
         return MAIN_PAGE
     else:
-        update.effective_message.reply_text(texts['name_error'][language(update)])
+        update.effective_message.reply_text(texts['name_error'][language(update)],
+                                            parse_mode='HTML')
