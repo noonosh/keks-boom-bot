@@ -226,7 +226,7 @@ def checkout(update, context):
     context.bot.send_message(chat_id=get_chat(update),
                              text=txt.format(
                                  user[0],
-                                 '+' + user[1],
+                                 user[1] if user[1][0] == '+' else '+' + user[1],
                                  deliver_to,
                                  texts['no_comments'][language(update)] if comment is None else comment,
                                  q,
@@ -267,7 +267,8 @@ def confirm_order(update, context):
                              text=new_order
                              .format(
                                  timestamp,
-                                 user[0], user[1],
+                                 user[0],
+                                 user[1] if user[1][0] == '+' else '+' + user[1],
                                  'тут пусто 🙃' if user[2] is None else user[2],
                                  user[3],
                                  q, format_price(UNIT_PRICE), format_price(q * UNIT_PRICE),

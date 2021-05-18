@@ -28,9 +28,9 @@ Let's get closer.\n<b>What is your name?</b>"""
         'en': "⚠️ Enter your name properly\n\nFor example: <i>Michael</i>"
     },
     'country_error': {
-        'uz': "🌎 Mamlakat xatosi",
-        'ru': '🌎 Ошибка страны',
-        'en': '🌎 Country error'
+        'uz': "🌎 Biz hozir faqat O'zbekistondagi telefon raqamlarni qabul qilamiz",
+        'ru': '🌎 Сейчас мы принимаем только номера в Узбекистане',
+        'en': '🌎 We accept only Uzbekistani numbers now'
     },
     'format_error': {
         'uz': "🟡 Format xatosi",
