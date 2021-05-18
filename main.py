@@ -101,9 +101,9 @@ def main():
         persistent=True
     )
 
-    dispatcher.add_handler(MessageHandler(ReplyToMessageFilter(Filters.user(1644589072)), reply_to_message))
     dispatcher.add_handler(main_conversation)
     dispatcher.add_error_handler(error_handler)
+    dispatcher.add_handler(MessageHandler(ReplyToMessageFilter(Filters.user(1644589072)), reply_to_message))
 
     updater.start_polling()
     updater.idle()
