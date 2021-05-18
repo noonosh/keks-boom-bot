@@ -3,7 +3,7 @@ from telegram.ext import (MessageHandler,
                           Updater,
                           ConversationHandler,
                           CallbackQueryHandler,
-                          Filters)
+                          Filters, PicklePersistence)
 from ptbcontrib.reply_to_message_filter import ReplyToMessageFilter
 from keys import API_TOKEN
 from callbacks.starter import start
@@ -44,7 +44,8 @@ def back_button():
 
 
 def main():
-    updater = Updater(token=API_TOKEN)
+    my_persistence = PicklePersistence(filename='RESTRICTED')
+    updater = Updater(token=API_TOKEN, persistence=my_persistence)
     dispatcher = updater.dispatcher
 
     main_conversation = ConversationHandler(
@@ -95,7 +96,9 @@ def main():
         },
         fallbacks=[
             MessageHandler(Filters.all & (~ Filters.user(1644589072)), start)
-        ]
+        ],
+        name='main_conv',
+        persistent=True
     )
 
     dispatcher.add_handler(MessageHandler(ReplyToMessageFilter(Filters.user(1644589072)), reply_to_message))
