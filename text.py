@@ -43,7 +43,16 @@ Let's get closer.\n<b>What is your name?</b>"""
         'en': '🏠 Home page:'
     },
     'description': {
-        'uz': "iltimos kimdur shuni perevod qibersin. rus tilidigisi bor",
+        'uz': """🔥 Tabiatga zarar keltirmaydigan BOOM! — Keks-Olovlar
+        
+⏰ 10-15 daqiqa ichida barbekyu, olov va har xil ko'mir yoqib beradi
+
+⛈ Har qanday ob-havoda yonadi
+
+<b>Paketda:</b> 9 dona Keks-olovlar
+<b>Narxi:</b> 10.000 so'm (1 paket)
+
+<i>🚛 5 ta paket yoki undan ko'p buyurtma berishda, etkazib berish - BEPUL</i>""",
         'ru': """🔥 Экологические BOOM! — Кекс-Огни
 
 ⏰ 10-15 минут горения для разжигания барбекю, костра и различного угля. 
@@ -54,7 +63,16 @@ Let's get closer.\n<b>What is your name?</b>"""
 <b>Цена:</b> 10.000 сум (1 пачка)
 
 <i>🚛 При заказе от 5 пачек доставка - БЕСПЛАТНО</i>""",
-        'en': 'please someone translate into english from russian. Thank you)'
+        'en': """Environmentally friendly BOOMs! — Fire-Cakes
+
+⏰ 10-15 minutes of burning to light up a barbecue, fire and any types of coal.
+
+⛈ Lights up in any type of weather
+
+<b>One pack includes:</b>  9 pcs. of fire-cakes
+<b>Price:</b> 10,000 som (per pack)
+
+<i>🚛 In case of ordering 5 or more packs Delivery is - FREE</i>"""
     },
     'change_language': {
         'uz': "🇺🇿 Tilni tanlang",
