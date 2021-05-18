@@ -4,16 +4,21 @@ from telegram.ext import (MessageHandler,
                           ConversationHandler,
                           CallbackQueryHandler,
                           Filters)
+from ptbcontrib.reply_to_message_filter import ReplyToMessageFilter
 from keys import API_TOKEN
-from callbacks.starter import start, reset
+from callbacks.starter import start
 from constants import *
 from error_send import error_handler
+from configurations import RESPONSES_GROUP_ID
 from callbacks.newbie import greet_user, name_accept
 from callbacks.orders import (preview, get_quantity, check_phone, address, request_phone, request_address,
                               get_comments, checkout, cancel_order, confirm_order)
 from text import buttons
 from callbacks.settings import settings_markup, change_language
 from callbacks.mainpage import back_to_main
+from callbacks.ask import ask_me, forward_message, reply_to_message
+from callbacks.export_db import export
+from callbacks.how_to_use import instructions
 
 
 def stringify(button_texts: str):
@@ -53,12 +58,18 @@ def main():
             ],
             MAIN_PAGE: [
                 MessageHandler(Filters.regex(join_regex('order')), preview),
-                MessageHandler(Filters.regex(join_regex('watch_tutorial')), ignore),
-                MessageHandler(Filters.regex(join_regex('ask_question')), ignore),
+                MessageHandler(Filters.regex(join_regex('watch_tutorial')), instructions),
+                MessageHandler(Filters.regex(join_regex('ask_question')), ask_me),
                 MessageHandler(Filters.regex(join_regex('change_language')), settings_markup)
             ],
             CHANGING_LANG: [
-                MessageHandler(Filters.regex(join_regex('language')), change_language)
+                MessageHandler(Filters.regex(join_regex('language')), change_language),
+                CommandHandler('download', export)
+            ],
+            ASKING: [
+                MessageHandler(Filters.regex(back_button()), back_to_main),
+                MessageHandler(Filters.text | Filters.photo | Filters.video | Filters.document,
+                               forward_message)
             ],
             SELECTING_QUANTITY: [
                 MessageHandler(Filters.regex(back_button()), back_to_main),
@@ -80,14 +91,14 @@ def main():
             CONFIRMING_ORDER: [
                 MessageHandler(Filters.regex(join_regex('confirm')), confirm_order),
                 MessageHandler(Filters.regex(join_regex('cancel')), cancel_order)
-
             ]
         },
         fallbacks=[
-            MessageHandler(Filters.all, start)
+            MessageHandler(Filters.all & (~ Filters.user(1644589072)), start)
         ]
     )
 
+    dispatcher.add_handler(MessageHandler(ReplyToMessageFilter(Filters.user(1644589072)), reply_to_message))
     dispatcher.add_handler(main_conversation)
     dispatcher.add_error_handler(error_handler)
 

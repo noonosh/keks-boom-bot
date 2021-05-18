@@ -9,8 +9,9 @@
     REQUESTING_PHONE,
     REQUESTING_ADDRESS,
     REQUESTING_COMMENTS,
-    CONFIRMING_ORDER
-) = range(9)
+    CONFIRMING_ORDER,
+    ASKING
+) = range(10)
 
 
 # User statuses

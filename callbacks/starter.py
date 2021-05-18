@@ -10,8 +10,8 @@ def start(update, context: CallbackContext):
     row = cursor.execute("SELECT id FROM users WHERE telegram_id = '{}'".format(chat)).fetchall()
     user = update.message
 
-    if chat < 0:
-        return  # In Group
+    if update.message.chat.id < 0:
+        pass  # In Group
 
     else:
         if len(row) == 0:

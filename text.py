@@ -138,7 +138,7 @@ Delivery: {} {}
     'order_accepted': {
         'uz': "Sizning buyurtmangiz qabul qilindi. Operator javobini kuting",
         'ru': "Ваш заказ был принят. Ожидайте ответа оператора",
-        'en': "Your order has been accepter. Please wait for the salesman's response"
+        'en': "Your order has been accepted. Please wait for the salesman's response"
     },
     'choose_quantity': {
         'uz': "Miqdorni <b>tanlang</b> yoki <b>tering</b>:",
@@ -202,7 +202,22 @@ Delivery: {} {}
 Комментарии: {}
 
 
-<b>Итого:</b> {} сум"""
+<b>Итого:</b> {} сум""",
+    'ask_me': {
+        'uz': "Savolingizni yo'llang va men administratorga yetkazib qo'yaman",
+        'ru': "Отправьте мне свой вопрос и я перешлю его нашим администраторам",
+        'en': "Send me your question and I will forward it to our administrators"
+    },
+    'got_you': {
+        'uz': "Murojaatingiz qabul qilindi!",
+        'ru': "Ваш запрос принят!",
+        'en': "Your request has been accepted!"
+    },
+    'replying': {
+        'uz': "<b>Sizga javob keldi:</b>\n{}",
+        'ru': "<b>Вам отправили сообщение:</b>\n{}",
+        'en': "<b>You have a new message:</b>\n{}"
+    }
 }
 
 buttons = {

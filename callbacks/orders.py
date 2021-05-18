@@ -27,8 +27,9 @@ def build_menu(
 
 def preview(update, context: CallbackContext):
     context.bot.send_photo(chat_id=get_chat(update),
-                           photo='AgACAgIAAxkBAAIFbmCic8tM8MbCq_Ih2efXS-'
-                                 'V1yIQ0AALcszEb5uIZSaPEts_gLT6VJqB_pS4AAwEAAwIAA20AAz75AAIfBA',
+                           photo='AgACAgIAAxkBAAMxYKN2sDqj6YNOus2_'
+                                 'uQQT1EBIAAGjAAJksTEbAAHAGUkpn3z1K'
+                                 'cYAAZIibAABny4AAwEAAwIAA3gAAwNBBAABHwQ',
                            caption=texts['description'][language(update)],
                            parse_mode='HTML')
     quantity(update, context)
@@ -231,7 +232,7 @@ def checkout(update, context):
                                  texts['no_comments'][language(update)] if comment is None else comment,
                                  q,
                                  format_price(UNIT_PRICE),
-                                 format_price(q * UNIT_PRICE),
+                                 format_price(q * UNIT_PRICE) + ' ' + texts['currency'][language(update)],
                                  format_price(total - q * UNIT_PRICE),
                                  texts['currency'][language(update)],
                                  format_price(total),
