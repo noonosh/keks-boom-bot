@@ -5,20 +5,22 @@ from telegram.ext import (MessageHandler,
                           CallbackQueryHandler,
                           Filters, PicklePersistence)
 from ptbcontrib.reply_to_message_filter import ReplyToMessageFilter
-from keys import API_TOKEN
 from callbacks.starter import start
-from constants import *
-from error_send import error_handler
-from configurations import RESPONSES_GROUP_ID
+from utils.constants import *
+from utils.error_send import error_handler
 from callbacks.newbie import greet_user, name_accept
 from callbacks.orders import (preview, get_quantity, check_phone, address, request_phone, request_address,
                               get_comments, checkout, cancel_order, confirm_order)
-from text import buttons
+from utils.text import buttons
 from callbacks.settings import settings_markup, change_language
 from callbacks.mainpage import back_to_main
 from callbacks.ask import ask_me, forward_message, reply_to_message
 from callbacks.export_db import export
 from callbacks.how_to_use import instructions
+import os
+import dotenv
+
+dotenv.load_dotenv()
 
 
 def stringify(button_texts: str):
@@ -45,7 +47,7 @@ def back_button():
 
 def main():
     my_persistence = PicklePersistence(filename='RESTRICTED')
-    updater = Updater(token=API_TOKEN, persistence=my_persistence)
+    updater = Updater(token=os.getenv("BOT_TOKEN"), persistence=my_persistence)
     dispatcher = updater.dispatcher
 
     main_conversation = ConversationHandler(
@@ -59,12 +61,16 @@ def main():
             ],
             MAIN_PAGE: [
                 MessageHandler(Filters.regex(join_regex('order')), preview),
-                MessageHandler(Filters.regex(join_regex('watch_tutorial')), instructions),
-                MessageHandler(Filters.regex(join_regex('ask_question')), ask_me),
-                MessageHandler(Filters.regex(join_regex('change_language')), settings_markup)
+                MessageHandler(Filters.regex(
+                    join_regex('watch_tutorial')), instructions),
+                MessageHandler(Filters.regex(
+                    join_regex('ask_question')), ask_me),
+                MessageHandler(Filters.regex(join_regex(
+                    'change_language')), settings_markup)
             ],
             CHANGING_LANG: [
-                MessageHandler(Filters.regex(join_regex('language')), change_language),
+                MessageHandler(Filters.regex(
+                    join_regex('language')), change_language),
                 CommandHandler('download', export)
             ],
             ASKING: [
@@ -90,8 +96,10 @@ def main():
                 MessageHandler(Filters.text, get_comments)
             ],
             CONFIRMING_ORDER: [
-                MessageHandler(Filters.regex(join_regex('confirm')), confirm_order),
-                MessageHandler(Filters.regex(join_regex('cancel')), cancel_order)
+                MessageHandler(Filters.regex(
+                    join_regex('confirm')), confirm_order),
+                MessageHandler(Filters.regex(
+                    join_regex('cancel')), cancel_order)
             ]
         },
         fallbacks=[
@@ -103,7 +111,12 @@ def main():
 
     dispatcher.add_handler(main_conversation)
     dispatcher.add_error_handler(error_handler)
-    dispatcher.add_handler(MessageHandler(ReplyToMessageFilter(Filters.user(1644589072)), reply_to_message))
+    dispatcher.add_handler(MessageHandler(ReplyToMessageFilter(
+        Filters.user(1644589072)), reply_to_message))
 
     updater.start_polling()
     updater.idle()
+
+
+if __name__ == '__main__':
+    main()
