@@ -166,8 +166,8 @@ Delivery: {} {}
         'en': "☎️ Phone number accepted"
     },
     'send_address': {
-        'uz': "👍 Zo'r. Endi manzilizni yuboring",
-        'ru': '👍 Отлично. Теперь отправьте адресс',
+        'uz': "👍 Zo'r. Endi manzilingizni yuboring",
+        'ru': '👍 Отлично. Теперь отправьте адрес',
         'en': "👍 Excellent. It's time to share your address"
     },
     'any_comments?': {
@@ -277,6 +277,3 @@ buttons = {
         'en': '📱 My phone number'
     }
 }
-
-
-
