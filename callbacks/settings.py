@@ -1,13 +1,14 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup
-from database_manager import *
-from text import buttons, texts
-from constants import CHANGING_LANG, MAIN_PAGE
+from utils.database_manager import *
+from utils.text import buttons, texts
+from utils.constants import CHANGING_LANG, MAIN_PAGE
 from callbacks.mainpage import main_menu
 
 
 def settings_markup(update, context):
     markup = [
-        [KeyboardButton(buttons['language']['uz']), KeyboardButton(buttons['language']['ru'])],
+        [KeyboardButton(buttons['language']['uz']),
+         KeyboardButton(buttons['language']['ru'])],
         [KeyboardButton(buttons['language']['en'])],
         [KeyboardButton(buttons['back'][language(update)])]
     ]
@@ -40,4 +41,3 @@ def change_language(update, context):
 
 def done(update, context):
     main_menu(update, context)
-

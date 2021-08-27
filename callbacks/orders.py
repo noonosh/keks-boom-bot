@@ -1,13 +1,17 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import CallbackContext
-from database_manager import get_chat, language, cursor, connect
-from constants import SELECTING_QUANTITY, REQUESTING_PHONE, REQUESTING_ADDRESS, REQUESTING_COMMENTS, \
-    CONFIRMING_ORDER, MAIN_PAGE
+from utils.database_manager import get_chat, language, cursor, connect
+from utils.constants import (SELECTING_QUANTITY,
+                             REQUESTING_PHONE,
+                             REQUESTING_ADDRESS,
+                             REQUESTING_COMMENTS,
+                             CONFIRMING_ORDER,
+                             MAIN_PAGE)
 from typing import Union, List
 from callbacks.mainpage import back_to_main
-from text import buttons, texts
+from utils.text import buttons, texts
 import datetime
-from configurations import DELIVERY_PRICE, UNIT_PRICE, ORDERS_CHANNEL_ID
+from settings import DELIVERY_PRICE, UNIT_PRICE, ORDERS_CHANNEL_ID
 import requests
 
 
@@ -19,9 +23,11 @@ def build_menu(
 ) -> List[List[KeyboardButton]]:
     menu = [b[i:i + n_cols] for i in range(0, len(b), n_cols)]
     if header_buttons:
-        menu.insert(0, header_buttons if isinstance(header_buttons, list) else [header_buttons])
+        menu.insert(0, header_buttons if isinstance(
+            header_buttons, list) else [header_buttons])
     if footer_buttons:
-        menu.append(footer_buttons if isinstance(footer_buttons, list) else [footer_buttons])
+        menu.append(footer_buttons if isinstance(
+            footer_buttons, list) else [footer_buttons])
     return menu
 
 
@@ -46,8 +52,7 @@ def quantity(update, context: CallbackContext):
                                             n_cols=3,
                                             footer_buttons=KeyboardButton(
                                                 buttons['back'][language(update)])
-                                            )
-                                 , resize_keyboard=True),
+                                            ), resize_keyboard=True),
                              parse_mode='HTML')
 
 
@@ -87,13 +92,15 @@ def get_quantity(update, context: CallbackContext):
 
 def request_phone(update, context):
     button = [
-        [KeyboardButton(buttons['send_phone_button'][language(update)], request_contact=True)],
+        [KeyboardButton(buttons['send_phone_button']
+                        [language(update)], request_contact=True)],
         [KeyboardButton(buttons['back'][language(update)])]
     ]
 
     context.bot.send_message(chat_id=get_chat(update),
                              text=texts['send_number'][language(update)],
-                             reply_markup=ReplyKeyboardMarkup(button, resize_keyboard=True),
+                             reply_markup=ReplyKeyboardMarkup(
+                                 button, resize_keyboard=True),
                              parse_mode='HTML')
     return REQUESTING_PHONE
 
@@ -114,7 +121,8 @@ def check_phone(update, context):
             request_address(update, context)
             return REQUESTING_ADDRESS
         else:
-            update.effective_message.reply_text(texts['country_error'][language(update)])
+            update.effective_message.reply_text(
+                texts['country_error'][language(update)])
     else:
         phone = message.text[1:]
         if phone[:3] == '998' and len(phone) == 12 and int(phone):  # chat not found
@@ -123,12 +131,14 @@ def check_phone(update, context):
             request_address(update, context)
             return REQUESTING_ADDRESS
         else:
-            update.effective_message.reply_text(texts['format_error'][language(update)])  # language
+            update.effective_message.reply_text(
+                texts['format_error'][language(update)])  # language
 
 
 def request_address(update, context: CallbackContext):
     button = [
-        [KeyboardButton(text=buttons['send_location'][language(update)], request_location=True)],
+        [KeyboardButton(text=buttons['send_location']
+                        [language(update)], request_location=True)],
         [KeyboardButton(buttons['back'][language(update)])]
     ]
 
@@ -200,9 +210,12 @@ def format_price(number):
 
 def checkout(update, context):
     order_id = context.chat_data['order_id']
-    q = cursor.execute("SELECT quantity FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
-    comment = cursor.execute("SELECT comments FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
-    deliver_to = cursor.execute("SELECT location FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    q = cursor.execute("SELECT quantity FROM orders WHERE order_id = '{}'".format(
+        order_id)).fetchone()[0]
+    comment = cursor.execute(
+        "SELECT comments FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    deliver_to = cursor.execute(
+        "SELECT location FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
     user = cursor.execute("SELECT name, phone_number FROM users WHERE telegram_id = '{}'"
                           .format(get_chat(update))).fetchmany()[0]
 
@@ -229,21 +242,25 @@ def checkout(update, context):
                                  user[0],
                                  user[1] if user[1][0] == '+' else '+' + user[1],
                                  deliver_to,
-                                 texts['no_comments'][language(update)] if comment is None else comment,
+                                 texts['no_comments'][language(
+                                     update)] if comment is None else comment,
                                  q,
                                  format_price(UNIT_PRICE),
-                                 format_price(q * UNIT_PRICE) + ' ' + texts['currency'][language(update)],
+                                 format_price(q * UNIT_PRICE) + ' ' +
+        texts['currency'][language(update)],
                                  format_price(total - q * UNIT_PRICE),
                                  texts['currency'][language(update)],
                                  format_price(total),
                                  texts['currency'][language(update)]),
-                             reply_markup=ReplyKeyboardMarkup(markup, resize_keyboard=True),
-                             parse_mode='HTML')
+        reply_markup=ReplyKeyboardMarkup(
+                                 markup, resize_keyboard=True),
+        parse_mode='HTML')
     return CONFIRMING_ORDER
 
 
 def cancel_order(update, context):
-    cursor.execute("UPDATE orders SET comments ='CANCELED' WHERE order_id = '{}'".format(context.chat_data['order_id']))
+    cursor.execute("UPDATE orders SET comments ='CANCELED' WHERE order_id = '{}'".format(
+        context.chat_data['order_id']))
     connect.commit()
 
     update.effective_message.reply_text(texts['canceled'][language(update)])
@@ -255,10 +272,14 @@ def cancel_order(update, context):
 def confirm_order(update, context):
     new_order = texts['new_order_for_admin']
     order_id = context.chat_data['order_id']
-    timestamp = cursor.execute("SELECT timestamp FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
-    q = cursor.execute("SELECT quantity FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
-    comment = cursor.execute("SELECT comments FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
-    deliver_to = cursor.execute("SELECT location FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    timestamp = cursor.execute(
+        "SELECT timestamp FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    q = cursor.execute("SELECT quantity FROM orders WHERE order_id = '{}'".format(
+        order_id)).fetchone()[0]
+    comment = cursor.execute(
+        "SELECT comments FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
+    deliver_to = cursor.execute(
+        "SELECT location FROM orders WHERE order_id = '{}'".format(order_id)).fetchone()[0]
     user = cursor.execute("SELECT name, phone_number, username, language FROM users WHERE telegram_id = '{}'"
                           .format(get_chat(update))).fetchmany()[0]
     delivery_cost = cursor.execute("SELECT delivery_cost FROM orders WHERE order_id = '{}'"
@@ -272,11 +293,13 @@ def confirm_order(update, context):
                                  user[1] if user[1][0] == '+' else '+' + user[1],
                                  'тут пусто 🙃' if user[2] is None else user[2],
                                  user[3],
-                                 q, format_price(UNIT_PRICE), format_price(q * UNIT_PRICE),
+                                 q, format_price(UNIT_PRICE), format_price(
+                                     q * UNIT_PRICE),
                                  format_price(int(delivery_cost)),
                                  deliver_to,
                                  'без коммента' if comment is None else comment,
-                                 format_price(q * UNIT_PRICE + int(delivery_cost))
+                                 format_price(q * UNIT_PRICE +
+                                              int(delivery_cost))
                              ),
                              parse_mode='HTML')
 

@@ -1,13 +1,14 @@
 from telegram.ext import CallbackContext
-from database_manager import get_chat, cursor, connect
-from constants import NewUser, LANGUAGE, ActiveUser, MAIN_PAGE
+from utils.database_manager import get_chat, cursor, connect
+from utils.constants import NewUser, LANGUAGE, ActiveUser, MAIN_PAGE
 from callbacks.newbie import choose_language
 from callbacks.mainpage import main_menu
 
 
 def start(update, context: CallbackContext):
     chat = get_chat(update)
-    row = cursor.execute("SELECT id FROM users WHERE telegram_id = '{}'".format(chat)).fetchall()
+    row = cursor.execute(
+        "SELECT id FROM users WHERE telegram_id = '{}'".format(chat)).fetchall()
     user = update.message
 
     if update.message.chat.id < 0:
@@ -40,4 +41,3 @@ def start(update, context: CallbackContext):
 def reset(update, context):
     main_menu(update, context)
     return MAIN_PAGE
-

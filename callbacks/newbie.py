@@ -2,9 +2,9 @@ from telegram.ext import CallbackContext
 from telegram import (ParseMode,
                       InlineKeyboardButton,
                       InlineKeyboardMarkup)
-from text import texts, buttons
-from database_manager import cursor, connect, language, get_chat
-from constants import LanguageGot, NAME, MAIN_PAGE, ActiveUser
+from utils.text import texts, buttons
+from utils.database_manager import cursor, connect, language, get_chat
+from utils.constants import LanguageGot, NAME, MAIN_PAGE, ActiveUser
 from callbacks.mainpage import main_menu
 
 
@@ -22,7 +22,8 @@ def choose_language(update, context):
 
         msg = context.bot.send_message(chat_id=message.chat_id,
                                        text=texts['choose_language'],
-                                       reply_markup=InlineKeyboardMarkup(markup),
+                                       reply_markup=InlineKeyboardMarkup(
+                                           markup),
                                        parse_mode=ParseMode.MARKDOWN_V2)
         context.chat_data.update({
             'language_message_id': msg.message_id
@@ -30,7 +31,8 @@ def choose_language(update, context):
     except KeyError:
         msg = context.bot.send_message(chat_id=message.chat_id,
                                        text=texts['choose_language'],
-                                       reply_markup=InlineKeyboardMarkup(markup),
+                                       reply_markup=InlineKeyboardMarkup(
+                                           markup),
                                        parse_mode=ParseMode.MARKDOWN_V2)
         context.chat_data.update({
             'language_message_id': msg.message_id

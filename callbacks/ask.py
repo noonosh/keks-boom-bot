@@ -1,8 +1,8 @@
-from database_manager import get_chat, language, cursor
+from utils.database_manager import get_chat, language, cursor
 from telegram import ReplyKeyboardMarkup
-from configurations import RESPONSES_GROUP_ID
-from text import buttons, texts
-from constants import ASKING, MAIN_PAGE
+from settings import RESPONSES_GROUP_ID
+from utils.text import buttons, texts
+from utils.constants import ASKING, MAIN_PAGE
 from callbacks.mainpage import back_to_main
 
 

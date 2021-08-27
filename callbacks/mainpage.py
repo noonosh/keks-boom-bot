@@ -1,8 +1,8 @@
 from telegram.ext import CallbackContext
 from telegram import ReplyKeyboardMarkup, KeyboardButton
-from text import texts, buttons
-from database_manager import language, get_chat
-from constants import MAIN_PAGE
+from utils.text import texts, buttons
+from utils.database_manager import language, get_chat
+from utils.constants import MAIN_PAGE
 
 
 def main_menu(update, context: CallbackContext):
@@ -21,5 +21,3 @@ def main_menu(update, context: CallbackContext):
 def back_to_main(update, context):
     main_menu(update, context)
     return MAIN_PAGE
-
-
