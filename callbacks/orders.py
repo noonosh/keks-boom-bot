@@ -13,6 +13,10 @@ from utils.text import buttons, texts
 import datetime
 from settings import DELIVERY_PRICE, UNIT_PRICE, ORDERS_CHANNEL_ID
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def build_menu(
@@ -148,11 +152,11 @@ def request_address(update, context: CallbackContext):
     return REQUESTING_ADDRESS
 
 
-def get_address_from_coords(coords):
+def get_address_from_coords(coords, update, is_english=False):
     PARAMS = {
-        "apikey": 'c6e76d4f-0205-49f5-b75b-91067f1acd42',
+        "apikey": os.getenv("GEOCODE_API_KEY"),
         "format": "json",
-        "lang": "ru_RU",
+        "lang": "en_US" if is_english else f"{language(update)}_{(language(update).upper())}",
         "kind": "house",
         "geocode": coords
     }
@@ -164,12 +168,17 @@ def get_address_from_coords(coords):
 
 
 def address(update, context):
+    chat_id = update.effective_chat.id
+    lang = language(update)
     location = update.message.location
     current_position = (location.longitude, location.latitude)
 
     coords = f"{current_position[0]},{current_position[1]}"
 
-    address_str = get_address_from_coords(coords)
+    if lang == "en":
+        address_str = get_address_from_coords(coords, update, is_english=True)
+    else:
+        address_str = get_address_from_coords(coords, update)
 
     cursor.execute("UPDATE orders SET location = '{}' WHERE order_id = '{}'"
                    .format(address_str, context.chat_data['order_id']))
