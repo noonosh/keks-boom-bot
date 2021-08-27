@@ -1,6 +1,6 @@
 import pandas as pd
 from telegram.ext import CallbackContext
-from database_manager import get_chat, connect, cursor
+from utils.database_manager import get_chat, connect, cursor
 import datetime
 from functools import wraps
 
