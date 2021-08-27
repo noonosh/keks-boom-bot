@@ -8,7 +8,7 @@ cursor = connect.cursor()
 
 
 def get_chat(update):
-    return update.effective_user.id
+    return update.effective_chat.id
 
 
 def language(update):
