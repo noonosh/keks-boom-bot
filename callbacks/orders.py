@@ -300,7 +300,7 @@ def confirm_order(update, context):
                                  timestamp,
                                  user[0],
                                  user[1] if user[1][0] == '+' else '+' + user[1],
-                                 'тут пусто 🙃' if user[2] is None else user[2],
+                                 'тут пусто 🙃' if user[2] is None else '@'+user[2],
                                  user[3],
                                  q, format_price(UNIT_PRICE), format_price(
                                      q * UNIT_PRICE),
