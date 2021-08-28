@@ -158,7 +158,7 @@ Delivery: {} {}
     'send_number': {
         'uz': "📱 Iltimos raqamingizni <b> +998 ** *** **** </b> deb <b>kiriting</b> yoki <b>yuboring</b>",
         'ru': "📱 Какой у Вас номер? <b>Отправьте</b> или <b>введите</b> ваш номер телефона в виде:\n\n<b>+998 ** *** ****</b>",
-        'en': "📱 What is your number? <b>Send by button</b> or <b>enter</b> your phone number as:\n\n<b>+998 ** *** ****</b>?"
+        'en': "📱 What is your number? <b>Send by button</b> or <b>enter</b> your phone number as:\n\n<b>+998 ** *** ****</b>"
     },
     'good_number': {
         'uz': "☎️ Qabul qilindi",
@@ -166,9 +166,9 @@ Delivery: {} {}
         'en': "☎️ Phone number accepted"
     },
     'send_address': {
-        'uz': "👍 Zo'r. Endi manzilingizni yuboring",
-        'ru': '👍 Отлично. Теперь отправьте адрес',
-        'en': "👍 Excellent. It's time to share your address"
+        'uz': "👍 Endi eltib berish manzilini yuboring",
+        'ru': '👍 Теперь отправьте адрес',
+        'en': "👍 Now share the location of delivery"
     },
     'any_comments?': {
         'uz': "💬 Istasangiz, izoh qoldirishingiz mumkin:",
@@ -217,6 +217,11 @@ Delivery: {} {}
         'uz': "<b>Sizga javob keldi:</b>\n{}",
         'ru': "<b>Вам отправили сообщение:</b>\n{}",
         'en': "<b>You have a new message:</b>\n{}"
+    },
+    'video_caption': {
+        'uz': "🔥 Bizning mahsulotimizga qiziqish bildirganingiz uchun rahmat!\n\n📺 Quyida video qo'llanmadan qanday foydalanishni bilib olishingiz mumkin",
+        'ru': "🔥 Спасибо, что заинтересовались продуктом <b>«KEKS-BOOM»</b>\n\n📺 Просмотрите видео-инструкцию по использованию Кекс-Огней",
+        'en': "🔥 Thank you for your interest in <b>«KEKS-BOOM»</b>!\n\n📺 Watch this video for more information about the usage of the product"
     }
 }
 
@@ -234,12 +239,12 @@ buttons = {
     'watch_tutorial': {
         'uz': "❓ Qanday ishlatadi?",
         'ru': "❓ Как пользоваться?",
-        'en': "❓ How to use?"
+        'en': "❓ How to use"
     },
     'change_language': {
-        'uz': "⚙️ Tilni o'zgartirish",
-        'ru': "⚙️ Поменять язык",
-        'en': "⚙️ Change language"
+        'uz': "🔁 Tilni o'zgartirish",
+        'ru': "🔁 Поменять язык",
+        'en': "🔁 Change language"
     },
     'ask_question': {
         'uz': "✍️ Savol so'rash",
